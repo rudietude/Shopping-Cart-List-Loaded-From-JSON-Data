@@ -1,0 +1,347 @@
+<!--------
+By: Jessica Rudolph
+Name: amazon-interview.html
+Purpose: Amazon test answer displays a gallery 
+of products their title and rating
+Created On: 1/26/2015 
+--------->
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+		<title>Jessica Rudolph's - Shopping Cart JSON Data</title>
+		<!-- Include Jquery -->
+	   <script
+  src="https://code.jquery.com/jquery-2.1.3.min.js"
+  integrity="sha256-ivk71nXhz9nsyFDoYoGf2sbjrR9ddh+XDkCcfZxjvcM="
+  crossorigin="anonymous"></script>
+		<!-- Include bootstrap CSS-->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+	<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+		<style>
+			.undo{
+				width:100%;
+				background-color:rgba(252,20,7,0.8);
+				display:none;				
+				z-index:9999;
+				position:fixed;
+				top:0px;
+				left:0px;
+				text-align:center;
+				padding:10px;
+				font-size:16px;
+				color:white;
+				font-weight:bold;
+			}
+			
+			
+			.productImg{
+				height: 100%;
+				width: 100%;
+				background-position: top center;
+				
+			}
+			
+			.productImg.secondary{
+			    display:none;
+			}
+			
+			.imgContainer{
+				height: 342px;
+				width: 263px;
+				overflow:hidden;
+				margin:auto;
+				background-color:white;
+			}
+			
+			.title{
+				padding-top:5px;
+				height:35px;
+				border-top:1px solid grey;
+				
+				font-size:12px;	
+		        color:#DDD;
+			}
+			
+			.star{
+				background-image:url('./sprite-site-wide-3._V375430972_.png');
+				width:20px;
+				height:20px;
+				display:inline-block;
+				overflow:hidden;
+				background-position:0px 56px;
+			}
+			
+			.star.empty{
+				background-position:92px 38px;
+				margin-left: 3px;
+			}
+			
+			.deleteProduct{
+				position:absolute;
+				z-index: 888;
+				left: 32px;
+				top: 9px;
+			}
+			
+			
+			/**********************************************
+			*Styles for ensuring the products display
+			*in their proper row
+			***********************************************/
+			/*.galleryItem:first-child{
+				padding-left:0px;
+			}
+			
+			.galleryItem:nth-child(3n + 1){
+				padding-right:0px;
+			}
+			*/
+			
+			.galleryItem:nth-child(4n + 1){
+				clear:left;
+			}
+			
+			.galleryItem{
+				text-align:left;
+				margin-bottom:20px;
+				
+			}
+			
+			.innerGalleryItem{
+				border:1px solid grey;
+				padding: 8px;
+				overflow:hidden;
+				background-color:black;
+			}
+			
+		</style>
+	 
+	</head>
+	<body >
+		
+		<header role="banner">
+			
+		</header>
+		<!-- Main content container Start-->
+		<main id="content" class="container-fluid" role="main">
+			<div class="row">				
+				
+				<div class="col-md-12">
+					<h1>Product Gallery One</h1>
+					<div id="productGalleryOne" class="galleryContentHolder"></div>
+				</div>
+				<div class="col-md-12">
+					<h1>Product Gallery Two</h1>
+					<div id="productGalleryTwo" class="galleryContentHolder"></div>
+				</div>
+			</div>
+		</main>
+		<!-- Main content container End-->
+		<footer>			
+			
+		</footer>
+		
+		<script type="text/javascript">
+			//********************************************
+			//Declare the JSON data for the image gallery
+			//******************************************** 
+			
+			
+			var data = 	[{
+								image:{
+									primary: "http://ecx.images-amazon.com/images/I/71i7zXFq%2BaL._UX342_.jpg",
+									secondary:"http://ecx.images-amazon.com/images/I/71BfdXBUtqL._UX342_.jpg",
+								},
+								rating:4,
+								title: "Nicole Miller Women's Lauren Ponte Dress"
+							},
+							{
+								image:{
+									primary: "http://ecx.images-amazon.com/images/I/71mOM2ALd3L._UY500_.jpg",
+									secondary:"http://ecx.images-amazon.com/images/I/71SuD5zv%2B1L._UX342_.jpg",
+								},
+								rating:4,
+								title: "HALSTON HERITAGE Women's One-Shoulder Dress with Bow Detail"
+							},
+							{
+								image:{
+									primary: "http://ecx.images-amazon.com/images/I/71lMCNhZ0UL._UX342_.jpg",
+									secondary:"http://ecx.images-amazon.com/images/I/71UWw1vwL-L._UX342_.jpg",
+								},
+								rating:4,
+								title: "Hailey Logan by Adrianna Papell Juniors Short Trans-Lace Dress"
+							},
+							{
+								image:{
+									primary: "http://ecx.images-amazon.com/images/I/71iY6hbcGBL._UX342_.jpg",
+									secondary:"http://ecx.images-amazon.com/images/I/719xcufM7PL._UX342_.jpg",
+								},
+								rating:4,
+								title: "Vince Camuto Women's Flair Skirt Dress"
+							},
+							{
+								image:{
+									primary: "http://ecx.images-amazon.com/images/I/71nWUieZo0L._UX342_.jpg",
+									secondary:"http://ecx.images-amazon.com/images/I/71VMM5bgtfL._UX342_.jpg",
+								},
+								rating:4,
+								title: "Hailey Logan by Adrianna Papell Juniors High/Low Mesh Inset Dress"
+							},
+							{
+								image:{
+									primary: "http://ecx.images-amazon.com/images/I/71gJpzupswL._UX342_.jpg",
+									secondary:"http://ecx.images-amazon.com/images/I/71zh08K2GhL._UX342_.jpg",
+								},
+								rating:0,
+								title: "Hailey Logan by Adrianna Papell Juniors Two-Tone High/Low Dress"
+							},
+							{
+								image:{
+									primary: "http://ecx.images-amazon.com/images/I/71BCMxJ63aL._UX342_.jpg",
+									secondary:"http://ecx.images-amazon.com/images/I/71%2BO3T%2Bi3EL._UX342_.jpg",
+								},
+								rating:1,
+								title: "Women's Onyx Beaded Side Panels Sleeveless Dress"
+							},
+							{
+								image:{
+									primary: "http://ecx.images-amazon.com/images/I/71eEw%2BvpHmL._UX342_.jpg",
+									secondary:"http://ecx.images-amazon.com/images/I/716gSZSt%2BEL._UX342_.jpg",
+								},
+								rating:2,
+								title: "Aidan Mattox Women's Aidan Sleeveless Dress"
+							},
+							{
+								image:{
+									primary: "http://ecx.images-amazon.com/images/I/71tnvNRGTFL._UX342_.jpg",
+									secondary:"http://ecx.images-amazon.com/images/I/71nxNbmiDmL._UX342_.jpg",
+								},
+								rating:4,
+								title: "Hailey Logan by Adrianna Papell Juniors Hi/Low Mesh-Inset Back Dress"
+							},
+							{
+								image:{
+									primary: "http://ecx.images-amazon.com/images/I/71pcRDtATpL._UX342_.jpg",
+									secondary:"http://ecx.images-amazon.com/images/I/71IqTWMqZvL._UX342_.jpg",
+								},
+								rating:5,
+								title: "London Times Women's Fit-and-Flare Dress with Lace Detail"
+							}
+						];
+				
+						// Document ready
+						$( document ).ready(function() {
+	
+							
+							displayProductGallery(data);
+							
+							//Dynamically created and event binded elements must 
+							//refer to an element that will always exists (latest JQuery specifications)
+							$(document).on('mouseover','.galleryItem .imgContainer', function() {
+								//Fade the primary image out to display the secondary image (product backside)
+							   $( this ).children('.productImg.primary').stop( true, true ).fadeOut( 300 );
+							   $( this ).children('.productImg.secondary').fadeIn( 250 );
+							});
+							
+							//Dynamically created and event binded elements must 
+							//refer to an element that will always exists (latest JQuery specifications)
+							$(document).on('mouseleave','.galleryItem .imgContainer', function() {
+								//hover off go back to displaying the primary image
+							      $( this ).children('.productImg.primary').stop( true, true ).fadeIn(100);
+							});
+							
+							var undoString = "";
+							var indexOfDeleted = 0;
+							//On Click of Delete button event
+							$(document).on('click','.deleteProduct', function() {
+							
+							   //Store the deleted products html
+							   undoString = '<div class="galleryItem col-md-3">'+$(this).parent('.innerGalleryItem').parent(".galleryItem").html()+'</div>';
+							   //alert(undoString); 
+							   //Store the position of this element
+							   $(this).parent('.innerGalleryItem').parent('.galleryItem').parent('.products').siblings('.undo').css("display","block");
+							   indexOfDeleted =  $(this).parent('.innerGalleryItem').parent('.galleryItem').index(); 
+							   //alert(indexOfDeleted);
+							   
+							   $(this).parent('.innerGalleryItem').parent(".galleryItem").remove();								
+								
+								//After 5 seconds hide the undo button
+								setTimeout(function () {
+									$('.undo').css("display","none");
+								}, 5000);
+							
+							});
+							
+							//Undo link on click event
+							
+							$( ".undo" ).on( "click", function() {
+								event.preventDefault();
+								//Append the last deleted galleryItem Back into the list
+								//in the same position it came from
+								if(indexOfDeleted == 0){
+									//$(".galleryContentHolder .galleryItem:first-child").before(undoString); 
+									$(this).siblings(".products").children(".galleryItem:first-child").before(undoString); 
+									
+									//$(".galleryContentHolder .galleryItem:first-child").children('.imgContainer').children('.productImg.primary').stop( true, true ).fadeIn(250);
+									$(this).siblings(".products").children(".galleryItem:first-child").children('.imgContainer').children('.productImg.primary').stop( true, true ).fadeIn(250);
+								}else{
+									$(this).siblings(".products").children(".galleryItem:nth-child(" + (indexOfDeleted) + ")").after(undoString); 
+									$(this).siblings(".products").children(".galleryItem:nth-child(" + (indexOfDeleted + 1) + ")").children('.imgContainer').children('.productImg.primary').stop( true, true ).fadeIn(250);
+							    }
+							  // alert(undoString);
+							    undoString = "";
+								indexOfDeleted = 0;								
+								$(this).css("display","none");								
+							   
+								
+							});			 				
+							
+							
+							
+						});
+						
+					function displayProductGallery(data){
+					
+						//Declare String for holding the galleries html
+							//var gallery = '<div class="row">';
+							var gallery = '<a class="undo" href="#">Undo</a><div class="products">';
+							var roundedRating = 0;
+							//alert(data[0].title);
+							for (i=0;i<data.length;i++) {
+							  //console.log("Key is "+i+" and Value is "+array[i]);
+							 
+							  //Open a .galleryItem
+							  gallery += '<div class="galleryItem col-md-3"><div class="innerGalleryItem"><input class="deleteProduct" type="button" value="X"/>';
+							  //Append the products primary & secondary image
+							  gallery += '<div class="imgContainer"><div class="productImg primary" style="background-image:url('+data[i].image.primary+');"></div><div class="productImg secondary" style="background-image:url('+data[i].image.secondary+');"></div></div>';
+							  gallery += '<p class="title">'+data[i].title+'<p>';
+							 
+							 //open rating container
+							
+							 //loops to display the number of stars 
+							 //until ratingCount is greater than rating value(data[i].rating)
+							roundedRating = Math.round(data[i].rating); 
+							//alert(roundedRating);
+							  for(ratingCount=0;ratingCount<roundedRating;ratingCount++){
+								gallery += '<div class="star"></div>';
+							 }
+							 for(noRating=data[i].rating;noRating<5;noRating++){
+								gallery += '<div class="star empty"></div>';
+							 }
+							 //gallery += "</div>";
+							  //Close the .galleryItem
+							  gallery += '</div></div>';
+							}
+							
+							//Close the gallery string
+							gallery += '</div>';
+							 //alert(gallery);
+							//Add the gallery html to the main content area of the page
+							$(gallery).appendTo(".galleryContentHolder");
+					}
+			</script>
+	</body>
+</html>
